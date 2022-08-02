@@ -27,6 +27,7 @@ let wait = setInterval(() => {
 
 
 let fragments = []
+const MAX_NO_OF_FRAGMENTS = 10
 
 
 function main() {
@@ -40,20 +41,78 @@ function main() {
   dock.addAddon({
     name: 'Fragments',
     id: 'kk-fragments',
-    html: generateHtml(),
+    html: '<div id="kk-fragments-container">' + generateBoxesHtml() + '</div>',
     css: generateCss(),
-    events: {}
+    events: {
+      '#kk-fragments': {
+        click: e => fragmentClicked(e)
+      }
+    }
   })
+
+  let graphLayer = Dock.layers.getByType('segmentation_with_graph', false)
+
+  if (!graphLayer) return
+
+  graphLayer[0].layer.displayState.rootSegments.changed.add((id, added) =>rootSegmentsChangedHandler(id, added))
 }
 
 
-function generateHtml() {
+function fragmentClicked(e) {
+  if (!e.target.classList.contains('fragment')) return
+  if (e.target.classList.contains('empty-fragment')) return
+
+  let id = Dock.stringToUint64(e.target.dataset.id)
+
+  let graphLayer = Dock.layers.getByType('segmentation_with_graph', false)
+
+  if (!graphLayer) return
+
+  graphLayer[0].layer.displayState.rootSegments.add(id)
+}
+
+
+function rootSegmentsChangedHandler(id, added) {
+  if (added) return
+
+  id = id.toJSON()
+
+  if (fragments.includes(id)) {
+    let index = fragments.indexOf(id)
+    fragments.splice(index, 1)
+  }
+
+  if (fragments.length === MAX_NO_OF_FRAGMENTS) {
+    fragments.shift()
+  }
+
+  fragments.push(id)
+  Dock.ls.set('fragments', fragments, true)
+  rebuildBoxes()
+}
+
+
+function generateBoxesHtml() {
+  let diff = MAX_NO_OF_FRAGMENTS - fragments.length
   let html = ''
-  for (let i = 0; i < 10; i++) {
-    html += '<div class="fragment"></div>'
+
+  if (diff) {
+    for (let i = 0; i < diff; i++) {
+      html += '<div class="fragment empty-fragment"></div>'
+    }
+  }
+
+  for (let i = diff; i < MAX_NO_OF_FRAGMENTS; i++) {
+    let fragId = fragments[i - diff]
+    html += `<div class="fragment" data-id="${fragId}" title="fragId"></div>`
   }
 
   return html
+}
+
+
+function rebuildBoxes() {
+  document.getElementById('kk-fragments-container').innerHTML = generateBoxesHtml()
 }
 
 
@@ -65,6 +124,12 @@ function generateCss() {
       height: 15px;
       background-color: yellow;
       border: 1px solid black;
+      cursor: pointer;
+    }
+
+    #kk-fragments .empty-fragment {
+      background-color: gray;
+      cursor: default;
     }
   `
 }
