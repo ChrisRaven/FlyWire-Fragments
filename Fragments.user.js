@@ -104,7 +104,7 @@ function generateBoxesHtml() {
 
   for (let i = diff; i < MAX_NO_OF_FRAGMENTS; i++) {
     let fragId = fragments[i - diff]
-    html += `<div class="fragment" data-id="${fragId}" title="fragId"></div>`
+    html += `<div class="fragment" data-id="${fragId}" title="${fragId}"></div>`
   }
 
   return html
