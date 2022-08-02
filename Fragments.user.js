@@ -2,7 +2,7 @@
 // @name         Fragments
 // @namespace    KrzysztofKruk-FlyWire
 // @version      0.1
-// @description  Keeps history of removed framents
+// @description  Keeps history of removed fragments
 // @author       Krzysztof Kruk
 // @match        https://ngl.flywire.ai/*
 // @grant        none
