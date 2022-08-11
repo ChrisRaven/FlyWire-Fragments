@@ -73,7 +73,7 @@ function fragmentClicked(e) {
 
 
 function rootSegmentsChangedHandler(id, added) {
-  if (added) return
+  if (added || !id) return
 
   id = id.toJSON()
 
