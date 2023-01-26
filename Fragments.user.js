@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         Fragments
 // @namespace    KrzysztofKruk-FlyWire
-// @version      0.1.1
+// @version      0.1.1.1
 // @description  Keeps history of removed fragments
 // @author       Krzysztof Kruk
 // @match        https://ngl.flywire.ai/*
+// @match        https://proofreading.flywire.ai/*
 // @grant        none
 // @updateURL    https://raw.githubusercontent.com/ChrisRaven/FlyWire-Fragments/main/Fragments.user.js
 // @downloadURL  https://raw.githubusercontent.com/ChrisRaven/FlyWire-Fragments/main/Fragments.user.js
@@ -52,7 +53,7 @@ function main() {
 
   let graphLayer = Dock.layers.getByType('segmentation_with_graph', false)
 
-  if (!graphLayer) return
+  if (!graphLayer || !graphLayer[0]) return
 
   graphLayer[0].layer.displayState.rootSegments.changed.add((id, added) =>rootSegmentsChangedHandler(id, added))
 }
@@ -133,3 +134,11 @@ function generateCss() {
     }
   `
 }
+
+
+// TODO:
+/*
+userscript.html?name=Fragments.user.js&id=6c48fa62-bf05-4817-8503-544f7781a319:59 Uncaught TypeError: Cannot read properties of undefined (reading 'layer')
+    at main (userscript.html?name=Fragments.user.js&id=6c48fa62-bf05-4817-8503-544f7781a319:59:17)
+    at userscript.html?name=Fragments.user.js&id=6c48fa62-bf05-4817-8503-544f7781a319:26:5
+    */
