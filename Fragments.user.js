@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         Fragments
 // @namespace    KrzysztofKruk-FlyWire
-// @version      0.1.1.1
+// @version      0.1.1.2
 // @description  Keeps history of removed fragments
 // @author       Krzysztof Kruk
 // @match        https://ngl.flywire.ai/*
-// @match        https://proofreading.flywire.ai/*
+// @match        https://edit.flywire.ai/*
 // @grant        none
 // @updateURL    https://raw.githubusercontent.com/ChrisRaven/FlyWire-Fragments/main/Fragments.user.js
 // @downloadURL  https://raw.githubusercontent.com/ChrisRaven/FlyWire-Fragments/main/Fragments.user.js
